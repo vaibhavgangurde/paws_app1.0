@@ -42,23 +42,31 @@ class AuthMethods {
         );
 
         String photoUrl = await StorageMethods()
-            .uploadImageToStorage('profilePics', file, false);
+            .uploadImageToStorage('profilePics', file, true);
 
-        model.User _user = model.User(
-          username: username,
-          uid: cred.user!.uid,
-          photoUrl: photoUrl,
-          email: email,
-          bio: bio,
-          followers: [],
-          following: [],
-        );
+      //  model.User _user = model.User(
+        //  'username': username,
+          //'uid': cred.user!.uid,
+          //'photoUrl': photoUrl,
+          //'email': email,
+          //'bio': bio,
+          //'followers': [],
+          //'following': [],
+            // );
 
         // adding user in our database
         await _firestore
             .collection("users")
             .doc(cred.user!.uid)
-            .set(_user.toJson());
+            .set({
+          'username': username,
+          'uid': cred.user!.uid,
+          'photoUrl': photoUrl,
+          'email': email,
+          'bio': bio,
+          'followers': [],
+          'following': [],
+        });
 
         res = "success";
       } else {
