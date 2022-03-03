@@ -9,6 +9,7 @@ import 'package:paws_app/utils/colors.dart';
 import 'package:paws_app/utils/global_variable.dart';
 import 'package:paws_app/utils/utils.dart';
 import 'package:paws_app/widgets/text_field_input.dart';
+import 'ot.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -121,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 onTap: loginUser,
               ),
               const SizedBox(
-                height: 12,
+                height: 2,
               ),
               Flexible(
                 child: Container(),
@@ -142,6 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         builder: (context) => const SignupScreen(),
                       ),
                     ),
+
                     child: Container(
                       child: const Text(
                         ' Signup.',
@@ -151,8 +153,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
+                  ),],),
+                   TextButton(   onPressed: () {
+                     Navigator.push(context,MaterialPageRoute(builder:(context) => const OTPScreen()));
+                   }
+                  ,child: Text(
+                      'Forgot Password'
                   ),
-                ],
               ),
             ],
           ),

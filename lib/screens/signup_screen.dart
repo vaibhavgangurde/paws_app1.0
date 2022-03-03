@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -57,7 +58,10 @@ class _SignupScreenState extends State<SignupScreen> {
         username: _usernameController.text,
         bio: _bioController.text,
         file: _image!);
-    // if string returned is sucess, user has been created
+    User? user = FirebaseAuth.instance.currentUser;
+    if(user!= null && !user.emailVerified){
+      await user.sendEmailVerification();
+    }
     if (res == "success") {
       setState(() {
         _isLoading = false;
