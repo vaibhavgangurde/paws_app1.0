@@ -46,9 +46,12 @@ class _CommentsScreenState extends State<CommentsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final User user = Provider.of<UserProvider>(context).getUser;
+    final UserProvider userProvider =Provider.of<UserProvider>(context);
+    if (userProvider == null) {
+      return CircularProgressIndicator();
+    }
 
-    return Scaffold(
+      return Scaffold(
       appBar: AppBar(
         backgroundColor: mobileBackgroundColor,
         title: const Text(
@@ -88,7 +91,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
           child: Row(
             children: [
               CircleAvatar(
-                backgroundImage: NetworkImage(user.photoUrl),
+                backgroundImage: NetworkImage(userProvider.getUser!.photoUrl),
                 radius: 18,
               ),
               Expanded(
@@ -97,7 +100,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                   child: TextField(
                     controller: commentEditingController,
                     decoration: InputDecoration(
-                      hintText: 'Comment as ${user.username}',
+                      hintText: 'Comment as ${userProvider.getUser!.username}',
                       border: InputBorder.none,
                     ),
                   ),
@@ -105,9 +108,9 @@ class _CommentsScreenState extends State<CommentsScreen> {
               ),
               InkWell(
                 onTap: () => postComment(
-                  user.uid,
-                  user.username,
-                  user.photoUrl,
+                  userProvider.getUser!.uid,
+                  userProvider.getUser!.username,
+                  userProvider.getUser!.photoUrl,
                 ),
                 child: Container(
                   padding:

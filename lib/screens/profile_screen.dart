@@ -79,6 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               centerTitle: false,
             ),
+
             body: ListView(
               children: [
                 Padding(
@@ -108,7 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     buildStatColumn(following, "following"),
                                   ],
                                 ),
-                                Row(
+                                Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
@@ -169,7 +170,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     followers++;
                                                   });
                                                 },
-                                              )
+                                              ),
+                                     IconButton(
+                                      icon: const Icon(
+                                        Icons.messenger_outline,
+                                        color: primaryColor,
+                                      ),
+                                      onPressed: () {
+                                      },
+                                    ),
                                   ],
                                 ),
                               ],
