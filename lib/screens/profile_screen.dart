@@ -74,8 +74,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         : Scaffold(
             appBar: AppBar(
               backgroundColor: mobileBackgroundColor,
-              title: Text(
-                userData['username'],
+              title: Row(
+                children: [
+                  Text(
+                    userData['username'],
+                  ),
+                ],
               ),
               centerTitle: false,
             ),
@@ -184,7 +188,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         child: Text(
                           userData['username'],
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),

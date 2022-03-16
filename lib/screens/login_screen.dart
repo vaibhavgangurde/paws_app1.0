@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+// import 'package:flutter_svg/flutter_svg.dart';
 import 'package:paws_app/resources/auth_methods.dart';
 import 'package:paws_app/responsive/mobile_screen_layout.dart';
 import 'package:paws_app/responsive/responsive_layout.dart';
@@ -74,11 +74,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Container(),
                 flex: 2,
               ),
-              SvgPicture.asset(
-                'assets/ic_paws_app.svg',
-                color: primaryColor,
-                height: 64,
+              Image.asset(
+                'assets/login_img.png',
+                width: 300,
+                height: 300,
               ),
+              // SvgPicture.asset(
+              //   'assets/ic_paws_app.svg',
+              //   color: primaryColor,
+              //   height: 64,
+              // ),
               const SizedBox(
                 height: 64,
               ),
