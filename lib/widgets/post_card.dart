@@ -62,7 +62,10 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
-    final model.User user = Provider.of<UserProvider>(context).getUser;
+    final model.User? user = Provider.of<UserProvider>(context).getUser;
+    if(user==null){
+      return CircularProgressIndicator();
+    }
     final width = MediaQuery.of(context).size.width;
 
     return Container(

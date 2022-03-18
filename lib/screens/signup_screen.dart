@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,6 +12,15 @@ import 'package:paws_app/utils/colors.dart';
 import 'package:paws_app/utils/global_variable.dart';
 import 'package:paws_app/utils/utils.dart';
 import 'package:paws_app/widgets/text_field_input.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:paws_app/api/google_signin_api.dart';
+
+
+GoogleSignIn _googleSignIn = GoogleSignIn(scopes: <String>[
+  'email',
+  'https://www.googleapis.com/auth/contacts.readonly',
+], clientId: "253532680021-bglvh4j83rplu8ejb0sa7fjp8aq6mijh.apps.googleusercontent.com");
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -48,7 +58,10 @@ class _SignupScreenState extends State<SignupScreen> {
         username: _usernameController.text,
         bio: _bioController.text,
         file: _image!);
-    // if string returned is sucess, user has been created
+    User? user = FirebaseAuth.instance.currentUser;
+    if(user!= null && !user.emailVerified){
+      await user.sendEmailVerification();
+    }
     if (res == "success") {
       setState(() {
         _isLoading = false;
@@ -127,7 +140,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 ],
               ),
               const SizedBox(
-                height: 24,
+                height: 10,
               ),
               TextFieldInput(
                 hintText: 'Enter your username',
@@ -190,6 +203,22 @@ class _SignupScreenState extends State<SignupScreen> {
                 child: Container(),
                 flex: 2,
               ),
+              MaterialButton(
+                elevation: 0,
+                minWidth: 5,
+                onPressed: x,
+                color: Colors.blue,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const <Widget>[
+                    Icon(FontAwesomeIcons.google),
+                    SizedBox(width: 10),
+                    Text('Sign-in using Google',
+                        style: TextStyle(color: Colors.white, fontSize: 16)),
+                  ],
+                ),
+                textColor: Colors.white,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -217,10 +246,27 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ],
               ),
+
+
             ],
           ),
         ),
       ),
     );
+  }
+ void x() async {
+    final userInfo = await GoogleSignInApi.login();
+    final auth = await userInfo!.authentication;
+    print(auth.accessToken);
+    _hangleSignIn();
+  }
+  Future<void> _hangleSignIn() async{
+    try{
+      await _googleSignIn.signIn().then((value) {
+        value!.authentication.then((value) {});
+      });
+    }catch (e){
+      print(e);
+    }
   }
 }
