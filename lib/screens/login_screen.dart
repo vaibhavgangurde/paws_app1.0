@@ -162,7 +162,8 @@ class _LoginScreenState extends State<LoginScreen> {
                    TextButton(   onPressed: () {
                      Navigator.push(context,MaterialPageRoute(builder:(context) => const OTPScreen()));
                    }
-                  ,child: Text(
+                  
+                  ,child: const Text(
                       'Forgot Password'
                   ),
               ),

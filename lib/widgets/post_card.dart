@@ -17,7 +17,6 @@ class PostCard extends StatefulWidget {
     Key? key,
     required this.snap,
   }) : super(key: key);
-
   @override
   State<PostCard> createState() => _PostCardState();
 }
@@ -25,7 +24,6 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard> {
   int commentLen = 0;
   bool isLikeAnimating = false;
-
   @override
   void initState() {
     super.initState();
@@ -62,10 +60,7 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
-    final model.User? user = Provider.of<UserProvider>(context).getUser;
-    if(user==null){
-      return CircularProgressIndicator();
-    }
+    final model.User user = Provider.of<UserProvider>(context).getUser;
     final width = MediaQuery.of(context).size.width;
 
     return Container(

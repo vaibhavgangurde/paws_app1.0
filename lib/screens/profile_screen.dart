@@ -11,7 +11,6 @@ import 'package:paws_app/widgets/follow_button.dart';
 class ProfileScreen extends StatefulWidget {
   final String uid;
   const ProfileScreen({Key? key, required this.uid}) : super(key: key);
-
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -23,7 +22,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int following = 0;
   bool isFollowing = false;
   bool isLoading = false;
-
   @override
   void initState() {
     super.initState();
@@ -39,13 +37,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           .collection('users')
           .doc(widget.uid)
           .get();
-
       // get post lENGTH
       var postSnap = await FirebaseFirestore.instance
           .collection('posts')
           .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
           .get();
-
       postLen = postSnap.docs.length;
       userData = userSnap.data()!;
       followers = userSnap.data()!['followers'].length;
@@ -74,16 +70,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         : Scaffold(
             appBar: AppBar(
               backgroundColor: mobileBackgroundColor,
-              title: Row(
-                children: [
-                  Text(
-                    userData['username'],
-                  ),
-                ],
+              title: Text(
+                userData['username'],
               ),
               centerTitle: false,
             ),
-
             body: ListView(
               children: [
                 Padding(
@@ -113,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     buildStatColumn(following, "following"),
                                   ],
                                 ),
-                                Column(
+                                Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
@@ -149,7 +140,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                         .currentUser!.uid,
                                                     userData['uid'],
                                                   );
-
                                                   setState(() {
                                                     isFollowing = false;
                                                     followers--;
@@ -168,21 +158,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                         .currentUser!.uid,
                                                     userData['uid'],
                                                   );
-
                                                   setState(() {
                                                     isFollowing = true;
                                                     followers++;
                                                   });
                                                 },
-                                              ),
-                                     IconButton(
-                                      icon: const Icon(
-                                        Icons.messenger_outline,
-                                        color: primaryColor,
-                                      ),
-                                      onPressed: () {
-                                      },
-                                    ),
+                                              )
                                   ],
                                 ),
                               ],
@@ -226,7 +207,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: CircularProgressIndicator(),
                       );
                     }
-
                     return GridView.builder(
                       shrinkWrap: true,
                       itemCount: (snapshot.data! as dynamic).docs.length,
@@ -240,7 +220,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       itemBuilder: (context, index) {
                         DocumentSnapshot snap =
                             (snapshot.data! as dynamic).docs[index];
-
                         return Container(
                           child: Image(
                             image: NetworkImage(snap['postUrl']),

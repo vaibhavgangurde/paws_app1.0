@@ -11,7 +11,6 @@ import 'package:provider/provider.dart';
 class CommentsScreen extends StatefulWidget {
   final postId;
   const CommentsScreen({Key? key, required this.postId}) : super(key: key);
-
   @override
   _CommentsScreenState createState() => _CommentsScreenState();
 }
@@ -19,7 +18,6 @@ class CommentsScreen extends StatefulWidget {
 class _CommentsScreenState extends State<CommentsScreen> {
   final TextEditingController commentEditingController =
       TextEditingController();
-
   void postComment(String uid, String name, String profilePic) async {
     try {
       String res = await FireStoreMethods().postComment(
@@ -29,7 +27,6 @@ class _CommentsScreenState extends State<CommentsScreen> {
         name,
         profilePic,
       );
-
       if (res != 'success') {
         showSnackBar(context, res);
       }
@@ -46,12 +43,9 @@ class _CommentsScreenState extends State<CommentsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final UserProvider userProvider =Provider.of<UserProvider>(context);
-    if (userProvider == null) {
-      return CircularProgressIndicator();
-    }
+    final User user = Provider.of<UserProvider>(context).getUser;
 
-      return Scaffold(
+    return Scaffold(
       appBar: AppBar(
         backgroundColor: mobileBackgroundColor,
         title: const Text(
@@ -72,7 +66,6 @@ class _CommentsScreenState extends State<CommentsScreen> {
               child: CircularProgressIndicator(),
             );
           }
-
           return ListView.builder(
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (ctx, index) => CommentCard(
@@ -91,7 +84,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
           child: Row(
             children: [
               CircleAvatar(
-                backgroundImage: NetworkImage(userProvider.getUser!.photoUrl),
+                backgroundImage: NetworkImage(user.photoUrl),
                 radius: 18,
               ),
               Expanded(
@@ -100,7 +93,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                   child: TextField(
                     controller: commentEditingController,
                     decoration: InputDecoration(
-                      hintText: 'Comment as ${userProvider.getUser!.username}',
+                      hintText: 'Comment as ${user.username}',
                       border: InputBorder.none,
                     ),
                   ),
@@ -108,9 +101,9 @@ class _CommentsScreenState extends State<CommentsScreen> {
               ),
               InkWell(
                 onTap: () => postComment(
-                  userProvider.getUser!.uid,
-                  userProvider.getUser!.username,
-                  userProvider.getUser!.photoUrl,
+                  user.uid,
+                  user.username,
+                  user.photoUrl,
                 ),
                 child: Container(
                   padding:

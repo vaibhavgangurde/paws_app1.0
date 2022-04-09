@@ -1,5 +1,4 @@
 import 'package:flutter/services.dart';
-// ignore: unused_import
 import 'package:geocoding/geocoding.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:geolocator/geolocator.dart';

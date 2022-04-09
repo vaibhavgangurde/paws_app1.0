@@ -7,7 +7,6 @@ import 'package:paws_app/utils/global_variable.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
-
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
@@ -15,7 +14,6 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController searchController = TextEditingController();
   bool isShowUsers = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,7 +87,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   );
                 }
 
-               return StaggeredGridView.countBuilder(
+                return StaggeredGridView.countBuilder(
                   crossAxisCount: 3,
                   itemCount: (snapshot.data! as dynamic).docs.length,
                   itemBuilder: (context, index) => Image.network(
