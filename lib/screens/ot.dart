@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:paws_app/utils/utils.dart';
+import 'package:paws_app/widgets/text_field_input.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class OTPScreen extends StatefulWidget {
   const OTPScreen({Key? key}) : super(key: key);
+
+
 
   @override
   _OTPScreenState createState() => _OTPScreenState();
 }
 
 class _OTPScreenState extends State<OTPScreen> {
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _otp = TextEditingController();
+  final auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,27 +35,26 @@ class _OTPScreenState extends State<OTPScreen> {
             height: 200,
             margin: const EdgeInsets.only(top: 60, left: 10, right: 10),
 
-            child: TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  hintText: 'CODE',
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10))),
+            child: TextFieldInput(
+              textInputType: TextInputType.emailAddress,
+              textEditingController: _email,
+              hintText: 'EMAIL',
             ),
-
             padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
           ),
+const SizedBox(
+  height: 200,
+),
           Container(
-            padding: const EdgeInsets.only(top: 160, left: 130),
-            child: ElevatedButton(onPressed: () {}, child: const Text('Done')),
-          ),
-          Container(
-            padding: const EdgeInsets.only(top: 200, left: 30),
+            padding: const EdgeInsets.only(top: 300, left: 30),
             child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  auth.sendPasswordResetEmail(email: _email.text );
+                  Navigator.of(context).pop();
+                  showSnackBar(context, 'PASSWORD RESET EMAIL HAS BEEN SENT');
+    },
                 child: const Text(
-                  'Resend code',
+                  'Send Password reset Email.',
                   style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
                 )),
           )

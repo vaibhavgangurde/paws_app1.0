@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,8 +13,10 @@ import 'package:paws_app/utils/global_variable.dart';
 import 'package:paws_app/utils/utils.dart';
 import 'package:paws_app/widgets/text_field_input.dart';
 
+
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
+
   @override
   _SignupScreenState createState() => _SignupScreenState();
 }
@@ -25,6 +28,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _bioController = TextEditingController();
   bool _isLoading = false;
   Uint8List? _image;
+
   @override
   void dispose() {
     super.dispose();
@@ -38,6 +42,7 @@ class _SignupScreenState extends State<SignupScreen> {
     setState(() {
       _isLoading = true;
     });
+
     // signup user using our authmethodds
     String res = await AuthMethods().signUpUser(
         email: _emailController.text,
@@ -45,7 +50,21 @@ class _SignupScreenState extends State<SignupScreen> {
         username: _usernameController.text,
         bio: _bioController.text,
         file: _image!);
-    // if string returned is sucess, user has been created
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null && !user.emailVerified) {
+      await user.sendEmailVerification();
+      var actionCodeSettings = ActionCodeSettings(
+        url: 'https://www.example.com/?email=${user.email}',
+        dynamicLinkDomain: 'example.page.link',
+        androidPackageName: 'com.example.android',
+        androidInstallApp: true,
+        androidMinimumVersion: '6',
+        iOSBundleId: 'com.example.ios',
+        handleCodeInApp: true,
+      );
+
+      await user.sendEmailVerification(actionCodeSettings);
+    }
     if (res == "success") {
       setState(() {
         _isLoading = false;
@@ -53,7 +72,8 @@ class _SignupScreenState extends State<SignupScreen> {
       // navigate to the home screen
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const ResponsiveLayout(
+          builder: (context) =>
+          const ResponsiveLayout(
             mobileScreenLayout: MobileScreenLayout(),
             webScreenLayout: WebScreenLayout(),
           ),
@@ -103,16 +123,16 @@ class _SignupScreenState extends State<SignupScreen> {
                 children: [
                   _image != null
                       ? CircleAvatar(
-                          radius: 64,
-                          backgroundImage: MemoryImage(_image!),
-                          backgroundColor: Colors.red,
-                        )
+                    radius: 64,
+                    backgroundImage: MemoryImage(_image!),
+                    backgroundColor: Colors.red,
+                  )
                       : const CircleAvatar(
-                          radius: 64,
-                          backgroundImage: NetworkImage(
-                              'https://i.stack.imgur.com/l60Hf.png'),
-                          backgroundColor: Colors.red,
-                        ),
+                    radius: 64,
+                    backgroundImage: NetworkImage(
+                        'https://i.stack.imgur.com/l60Hf.png'),
+                    backgroundColor: Colors.red,
+                  ),
                   Positioned(
                     bottom: -10,
                     left: 80,
@@ -124,7 +144,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 ],
               ),
               const SizedBox(
-                height: 24,
+                height: 10,
               ),
               TextFieldInput(
                 hintText: 'Enter your username',
@@ -163,11 +183,11 @@ class _SignupScreenState extends State<SignupScreen> {
                 child: Container(
                   child: !_isLoading
                       ? const Text(
-                          'Sign up',
-                        )
+                    'Sign up',
+                  )
                       : const CircularProgressIndicator(
-                          color: primaryColor,
-                        ),
+                    color: primaryColor,
+                  ),
                   width: double.infinity,
                   alignment: Alignment.center,
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -197,11 +217,12 @@ class _SignupScreenState extends State<SignupScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                   ),
                   GestureDetector(
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const LoginScreen(),
-                      ),
-                    ),
+                    onTap: () =>
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const LoginScreen(),
+                          ),
+                        ),
                     child: Container(
                       child: const Text(
                         ' Login.',
@@ -214,6 +235,8 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ],
               ),
+
+
             ],
           ),
         ),

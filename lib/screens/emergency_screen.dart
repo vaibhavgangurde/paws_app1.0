@@ -4,6 +4,23 @@ import 'package:image_picker/image_picker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:paws_app/models/eposte.dart';
+import 'package:paws_app/resources/firestore_methods.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:paws_app/models/post.dart';
+import 'package:paws_app/resources/storage_methods.dart';
+import 'package:uuid/uuid.dart';
+import 'dart:typed_data';
+import 'package:paws_app/providers/user_provider.dart';
+import 'package:paws_app/resources/firestore_methods.dart';
+import 'package:paws_app/utils/colors.dart';
+import 'package:paws_app/utils/utils.dart';
+import 'package:provider/provider.dart';
+
+import '../utils/utils.dart';
+import '../widgets/text_field_input.dart';
+import 'package:geocoding/geocoding.dart';
 
 class EmergencyScreen extends StatefulWidget {
   const EmergencyScreen({Key? key}) : super(key: key);
@@ -13,6 +30,10 @@ class EmergencyScreen extends StatefulWidget {
 }
 
 class _EmergencyScreenState extends State<EmergencyScreen> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final TextEditingController t1= new TextEditingController();
+  bool isLoading = false;
+  Uint8List? _file;
   List<String> myItems = [
     "select type ok",
     "Accident",
@@ -25,25 +46,77 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
   var myInitialItem = "select type ok";
   String colourGroupVariable = '';
   File? image;
-  Future pickImage() async {
+  Future<String> eimage1(String description, Uint8List file, String uid,
+      String username, String profImage) async {
+    // asking uid here because we dont want to make extra calls to firebase auth when we can just get from our state management
+    String res = "Some error occurred";
     try {
-      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (image == null) return;
-
-      final imageTemporary = File(image.path);
-
-      this.image = imageTemporary;
-    } on PlatformException catch (e) {
-      print('success: $e');
+      String photoUrl =
+      await StorageMethods().uploadImageToStorage('eposts', file, true);
+      String postId = const Uuid().v1(); // creates unique id based on time
+      eposte epost = eposte(
+        description: description,
+        uid: uid,
+        username: username,
+        postId: postId,
+        datePublished: DateTime.now(),
+        postUrl: photoUrl,
+      );
+      _firestore.collection('Emergencyimage').doc(postId).set(epost.toJson());
+      res = "success";
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
+  void postImage(String uid, String username, String profImage) async {
+    setState(() {
+      isLoading = true;
+    });
+    // start the loading
+    try {
+      // upload to storage and db
+      String res = await eimage1(
+        t1.text,
+        _file!,
+        uid,
+        username,
+        profImage,
+      );
+      if (res == "success") {
+        setState(() {
+          isLoading = false;
+        });
+        showSnackBar(
+          context,
+          'Posted!',
+        );
+      } else {
+        showSnackBar(context, res);
+      }
+    } catch (err) {
+      setState(() {
+        isLoading = false;
+      });
+      showSnackBar(
+        context,
+        err.toString(),
+      );
     }
   }
+  @override
+  void dispose() {
+    super.dispose();
+    t1.dispose();
+  }
+
 
   var locationMessage = "";
 
   var locationMessa = "";
 
   void getCurrentLocation() async {
-    var position = await Geolocator.getCurrentPosition(
+   var position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
     var Lastposition = await Geolocator.getLastKnownPosition();
@@ -51,14 +124,14 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
 
     setState(() {
       locationMessage = " $position.altitude";
-      //locationMessa = "$position.longitude";
-
       Placemark() async {}
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
+    _file == null;
     return Stack(
       children: [
         Scaffold(
@@ -105,25 +178,35 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                     //         ))
                     //   ],
                     // ),
-                    Row(
+                   Column(
                       children: [
                         const Padding(
-                            padding: EdgeInsets.only(top: 200, left: 50)),
+                            padding: EdgeInsets.only(top: 10, left: 50)),
                         OutlinedButton.icon(
                           style: OutlinedButton.styleFrom(
                               backgroundColor: Colors.orange.shade50,
                               minimumSize: const Size(300, 100)),
-                          onPressed: () => pickImage(),
+                          onPressed:() async {
+                        Uint8List file = await pickImage(ImageSource.camera);
+                        setState(() {
+                        _file = file;
+                        });
+                        },
                           icon: const Icon(
                             Icons.image_search,
                           ),
                           label: const Text(
-                            'Upload Image',
+                            'CLICK IMAGE',
                             style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black),
                           ),
+                        ),
+                        TextFieldInput(
+                          hintText: 'Enter in detail',
+                          textInputType: TextInputType.text,
+                          textEditingController: t1,
                         ),
                       ],
                     ),
@@ -134,7 +217,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                               backgroundColor: Colors.orange.shade50,
                               minimumSize: const Size(300, 100)),
                           onPressed: () {
-                            getCurrentLocation();
+                           getCurrentLocation();
                           },
                           icon: const Icon(Icons.location_on_sharp),
                           label: const Text('Get Location',
@@ -142,6 +225,20 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black)),
+                        ),
+                        TextButton(
+                          onPressed: () => postImage(
+                            userProvider.getUser.uid,
+                            userProvider.getUser.username,
+                            userProvider.getUser.photoUrl,
+                          ),
+                          child: const Text(
+                            "Post",
+                            style: TextStyle(
+                                color: Colors.blueAccent,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0),
+                          ),
                         ),
                       ],
                     ),

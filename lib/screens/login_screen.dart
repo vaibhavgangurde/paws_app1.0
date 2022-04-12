@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:paws_app/resources/auth_methods.dart';
 import 'package:paws_app/responsive/mobile_screen_layout.dart';
 import 'package:paws_app/responsive/responsive_layout.dart';
@@ -13,7 +13,6 @@ import 'ot.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
-
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -160,9 +159,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),],),
                    TextButton(   onPressed: () {
-                     Navigator.push(context,MaterialPageRoute(builder:(context) => const OTPScreen()));
+                     if (_emailController != null) {
+                       Navigator.push(context, MaterialPageRoute(
+                           builder: (context) => const OTPScreen()));
+                     }
                    }
-                  
                   ,child: const Text(
                       'Forgot Password'
                   ),
