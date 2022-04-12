@@ -32,7 +32,7 @@ class Post {
       datePublished: snapshot["datePublished"],
       username: snapshot["username"],
       postUrl: snapshot['postUrl'],
-      profImage: snapshot['profImage']
+      profImage: snapshot['profImage'],
     );
   }
 

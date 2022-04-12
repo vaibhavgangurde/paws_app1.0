@@ -17,7 +17,7 @@ import 'package:paws_app/resources/firestore_methods.dart';
 import 'package:paws_app/utils/colors.dart';
 import 'package:paws_app/utils/utils.dart';
 import 'package:provider/provider.dart';
-
+import 'epostscreen.dart';
 import '../utils/utils.dart';
 import '../widgets/text_field_input.dart';
 import 'package:geocoding/geocoding.dart';
@@ -31,7 +31,7 @@ class EmergencyScreen extends StatefulWidget {
 
 class _EmergencyScreenState extends State<EmergencyScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final TextEditingController t1= new TextEditingController();
+  final TextEditingController t1 = new TextEditingController();
   bool isLoading = false;
   Uint8List? _file;
   List<String> myItems = [
@@ -46,8 +46,9 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
   var myInitialItem = "select type ok";
   String colourGroupVariable = '';
   File? image;
+
   Future<String> eimage1(String description, Uint8List file, String uid,
-      String username, String profImage) async {
+      String username, String profImage, String location) async {
     // asking uid here because we dont want to make extra calls to firebase auth when we can just get from our state management
     String res = "Some error occurred";
     try {
@@ -61,6 +62,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
         postId: postId,
         datePublished: DateTime.now(),
         postUrl: photoUrl,
+        location: location,
       );
       _firestore.collection('Emergencyimage').doc(postId).set(epost.toJson());
       res = "success";
@@ -69,7 +71,8 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
     }
     return res;
   }
-  void postImage(String uid, String username, String profImage) async {
+
+  void postImage(String uid, String username, String profImage,String location) async {
     setState(() {
       isLoading = true;
     });
@@ -82,6 +85,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
         uid,
         username,
         profImage,
+        currentAddress,
       );
       if (res == "success") {
         setState(() {
@@ -104,27 +108,61 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
       );
     }
   }
+
   @override
   void dispose() {
     super.dispose();
     t1.dispose();
   }
 
+  String location = 'Null, Press Button';
+  String Address = 'search';
+  String currentAddress = '';
 
-  var locationMessage = "";
-
-  var locationMessa = "";
-
-  void getCurrentLocation() async {
-   var position = await Geolocator.getCurrentPosition(
+  Future<Position> _getGeoLocationPosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      await Geolocator.openLocationSettings();
+      return Future.error('Location services are disabled.');
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
+  }
 
-    var Lastposition = await Geolocator.getLastKnownPosition();
-    print(Lastposition);
-
+  Future<void> GetAddressFromLatLong(Position position) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude, position.longitude);
+    print(placemarks);
+    Placemark place = placemarks[0];
+    Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place
+        .postalCode}, ${place.country}';
     setState(() {
-      locationMessage = " $position.altitude";
-      Placemark() async {}
+      currentAddress = Address;
     });
   }
 
@@ -178,7 +216,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                     //         ))
                     //   ],
                     // ),
-                   Column(
+                    Column(
                       children: [
                         const Padding(
                             padding: EdgeInsets.only(top: 10, left: 50)),
@@ -186,12 +224,13 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                           style: OutlinedButton.styleFrom(
                               backgroundColor: Colors.orange.shade50,
                               minimumSize: const Size(300, 100)),
-                          onPressed:() async {
-                        Uint8List file = await pickImage(ImageSource.camera);
-                        setState(() {
-                        _file = file;
-                        });
-                        },
+                          onPressed: () async {
+                            Uint8List file = await pickImage(
+                                ImageSource.camera);
+                            setState(() {
+                              _file = file;
+                            });
+                          },
                           icon: const Icon(
                             Icons.image_search,
                           ),
@@ -216,8 +255,12 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                           style: OutlinedButton.styleFrom(
                               backgroundColor: Colors.orange.shade50,
                               minimumSize: const Size(300, 100)),
-                          onPressed: () {
-                           getCurrentLocation();
+                          onPressed: () async {
+                            Position position = await _getGeoLocationPosition();
+                            location =
+                            'Lat: ${position.latitude} , Long: ${position
+                                .longitude}';
+                            GetAddressFromLatLong(position);
                           },
                           icon: const Icon(Icons.location_on_sharp),
                           label: const Text('Get Location',
@@ -227,11 +270,13 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                                   color: Colors.black)),
                         ),
                         TextButton(
-                          onPressed: () => postImage(
-                            userProvider.getUser.uid,
-                            userProvider.getUser.username,
-                            userProvider.getUser.photoUrl,
-                          ),
+                          onPressed: () =>
+                              postImage(
+                                userProvider.getUser.uid,
+                                userProvider.getUser.username,
+                                userProvider.getUser.photoUrl,
+                                userProvider.getUser.email,
+                              ),
                           child: const Text(
                             "Post",
                             style: TextStyle(
@@ -244,7 +289,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                     ),
                     Container(
                       child: Text(
-                        " Current Location:\n" + locationMessage,
+                        " Current Location:\n" + currentAddress,
                         style: const TextStyle(
                             fontSize: 12, fontWeight: FontWeight.bold),
                       ),
@@ -254,7 +299,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                             width: 2,
                           ),
                           borderRadius:
-                              const BorderRadius.all(Radius.circular(10))),
+                          const BorderRadius.all(Radius.circular(10))),
                       padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
                       margin: const EdgeInsets.all(20),
                     ),
@@ -274,7 +319,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                         DropdownButtonHideUnderline(
                           child: Container(
                             decoration:
-                                const BoxDecoration(color: Colors.green),
+                            const BoxDecoration(color: Colors.green),
                             padding: const EdgeInsets.symmetric(
                                 vertical: 2, horizontal: 40),
                             child: DropdownButton(
@@ -372,7 +417,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                               border: const OutlineInputBorder(
                                   borderSide: BorderSide(width: 2),
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(30.0))),
+                                  BorderRadius.all(Radius.circular(30.0))),
                               fillColor: Colors.yellow.shade100,
                               filled: true,
                             ),
