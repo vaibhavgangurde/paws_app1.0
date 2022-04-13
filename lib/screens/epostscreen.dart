@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:paws_app/utils/colors.dart';
 import 'package:paws_app/utils/global_variable.dart';
 import 'package:paws_app/widgets/post_card.dart';
+import 'package:paws_app/widgets/eposte_card.dart';
 
 class epostScreen extends StatefulWidget {
   const epostScreen({Key? key}) : super(key: key);
@@ -54,7 +55,7 @@ class _epostScreenState extends State<epostScreen> {
                 horizontal: width > webScreenSize ? width * 0.3 : 0,
                 vertical: width > webScreenSize ? 15 : 0,
               ),
-              child: PostCard(
+              child: ePostCard(
                 snap: snapshot.data!.docs[index].data(),
               ),
             ),

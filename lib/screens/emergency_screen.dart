@@ -1,26 +1,20 @@
-import 'package:flutter/services.dart';
+
 import 'package:geocoding/geocoding.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:paws_app/models/eposte.dart';
-import 'package:paws_app/resources/firestore_methods.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:paws_app/models/post.dart';
 import 'package:paws_app/resources/storage_methods.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:typed_data';
 import 'package:paws_app/providers/user_provider.dart';
-import 'package:paws_app/resources/firestore_methods.dart';
-import 'package:paws_app/utils/colors.dart';
 import 'package:paws_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'epostscreen.dart';
 import '../utils/utils.dart';
 import '../widgets/text_field_input.dart';
-import 'package:geocoding/geocoding.dart';
 
 class EmergencyScreen extends StatefulWidget {
   const EmergencyScreen({Key? key}) : super(key: key);
@@ -31,7 +25,7 @@ class EmergencyScreen extends StatefulWidget {
 
 class _EmergencyScreenState extends State<EmergencyScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final TextEditingController t1 = new TextEditingController();
+  final TextEditingController t1 = TextEditingController();
   bool isLoading = false;
   Uint8List? _file;
   List<String> myItems = [
@@ -270,13 +264,15 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                                   color: Colors.black)),
                         ),
                         TextButton(
-                          onPressed: () =>
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (context) => const epostScreen()));
                               postImage(
                                 userProvider.getUser.uid,
                                 userProvider.getUser.username,
                                 userProvider.getUser.photoUrl,
                                 userProvider.getUser.email,
-                              ),
+                              );},
                           child: const Text(
                             "Post",
                             style: TextStyle(
