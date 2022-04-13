@@ -3,11 +3,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:paws_app/providers/user_provider.dart';
-// import 'package:paws_app/screens/onboarding_pages.dart';
+import 'package:paws_app/screens/onboarding_pages.dart';
 import 'package:paws_app/responsive/mobile_screen_layout.dart';
 import 'package:paws_app/responsive/responsive_layout.dart';
 import 'package:paws_app/responsive/web_screen_layout.dart';
-import 'package:paws_app/screens/login_screen.dart';
+// import 'package:paws_app/screens/login_screen.dart';
 // import 'package:paws_app/utils/colors.dart';
 import 'package:provider/provider.dart';
 
@@ -75,7 +75,7 @@ class MyApp extends StatelessWidget {
               );
             }
 
-            return const LoginScreen();
+            return const OnBoardingPages();
           },
         ),
       ),
