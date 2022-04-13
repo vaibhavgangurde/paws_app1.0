@@ -23,7 +23,7 @@ class AuthMethods {
 
   Future<String> signUpUser({
     required String email,
-    required String password ,
+    required String password,
     required String username,
     required String bio,
     required Uint8List file,
@@ -45,21 +45,18 @@ class AuthMethods {
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('profilePics', file, true);
 
-      //  model.User _user = model.User(
+        //  model.User _user = model.User(
         //  'username': username,
-          //'uid': cred.user!.uid,
-          //'photoUrl': photoUrl,
-          //'email': email,
-          //'bio': bio,
-          //'followers': [],
-          //'following': [],
-            // );
+        //'uid': cred.user!.uid,
+        //'photoUrl': photoUrl,
+        //'email': email,
+        //'bio': bio,
+        //'followers': [],
+        //'following': [],
+        // );
 
         // adding user in our database
-        await _firestore
-            .collection("users")
-            .doc(cred.user!.uid)
-            .set({
+        await _firestore.collection("users").doc(cred.user!.uid).set({
           'username': username,
           'uid': cred.user!.uid,
           'photoUrl': photoUrl,
