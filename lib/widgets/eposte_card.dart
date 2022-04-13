@@ -23,7 +23,7 @@ class ePostCard extends StatefulWidget {
 
 class _ePostCardState extends State<ePostCard> {
 
-  deletePost(String postId) async {
+  deleteePost(String postId) async {
     try {
       await FireStoreMethods().deletePost(postId);
     } catch (err) {
@@ -110,7 +110,7 @@ class _ePostCardState extends State<ePostCard> {
                                       child: Text(e),
                                     ),
                                     onTap: () {
-                                      deletePost(
+                                      deleteePost(
                                         widget.snap['postId']
                                             .toString(),
                                       );

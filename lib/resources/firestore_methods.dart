@@ -97,6 +97,16 @@ class FireStoreMethods {
     }
     return res;
   }
+  Future<String> deleteePost(String postId) async {
+    String res = "Some error occurred";
+    try {
+      await _firestore.collection('eposts').doc(postId).delete();
+      res = 'success';
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
 
   Future<void> followUser(String uid, String followId) async {
     try {
