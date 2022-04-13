@@ -7,6 +7,7 @@ class eposte{
   final String postId;
   final DateTime datePublished;
   final String postUrl;
+  final String location;
 
   const eposte(
       {required this.description,
@@ -15,6 +16,7 @@ class eposte{
         required this.postId,
         required this.datePublished,
         required this.postUrl,
+        required this.location,
       });
 
   static eposte fromSnap(DocumentSnapshot snap) {
@@ -27,6 +29,7 @@ class eposte{
         datePublished: snapshot["datePublished"],
         username: snapshot["username"],
         postUrl: snapshot['postUrl'],
+        location: snapshot["location"],
     );
   }
 
@@ -37,5 +40,6 @@ class eposte{
     "postId": postId,
     "datePublished": datePublished,
     'postUrl': postUrl,
+    "location": location,
   };
 }
