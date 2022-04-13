@@ -236,10 +236,19 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                                 color: Colors.black),
                           ),
                         ),
-                        TextFieldInput(
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(50, 10, 50, 10),
+                        child :TextFieldInput(
                           hintText: 'Enter in detail',
                           textInputType: TextInputType.text,
                           textEditingController: t1,
+                        ),
+                        ),
+                        SizedBox(
+                          height: 10,
                         ),
                       ],
                     ),
@@ -263,26 +272,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black)),
                         ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => const epostScreen()));
-                              postImage(
-                                userProvider.getUser.uid,
-                                userProvider.getUser.username,
-                                userProvider.getUser.photoUrl,
-                                userProvider.getUser.email,
-                              );},
-                          child: const Text(
-                            "Post",
-                            style: TextStyle(
-                                color: Colors.blueAccent,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16.0),
-                          ),
-                        ),
-                      ],
-                    ),
+
                     Container(
                       child: Text(
                         " Current Location:\n" + currentAddress,
@@ -299,8 +289,38 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                       padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
                       margin: const EdgeInsets.all(20),
                     ),
-
-                    Row(
+                    TextButton(
+                      style:  TextButton.styleFrom(
+                        primary: Colors.blue,
+                      ),
+                      onPressed: () {
+                        if
+                      (t1.text==null && currentAddress==null && _file==null ){
+                          SnackBar(content: Text('Enter the details'),);
+                        Navigator.pop(context);
+                      }
+                      else{
+                        Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => const epostScreen()));
+                        postImage(
+                          userProvider.getUser.uid,
+                          userProvider.getUser.username,
+                          userProvider.getUser.photoUrl,
+                          userProvider.getUser.email,
+                        );
+                      };
+                      },
+                      child: const Text(
+                        "Post",
+                        style: TextStyle(
+                            color: Colors.blueAccent,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0),
+                      ),
+                    ),
+                  ],
+                ),
+                  /* Row(
                       children: const [
                         Padding(padding: EdgeInsets.only(top: 40, left: 20)),
                         Text(
@@ -420,7 +440,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                           ),
                         )
                       ],
-                    ),
+                    ),*/
 
                     Container(),
                   ],

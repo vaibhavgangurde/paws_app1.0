@@ -11,6 +11,7 @@ class TextFieldInput extends StatelessWidget {
     this.isPass = false,
     required this.hintText,
     required this.textInputType,
+
   }) : super(key: key);
 
   @override
