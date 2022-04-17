@@ -109,8 +109,8 @@ class _PostCardState extends State<PostCard> {
                     ),
                   ),
                 ),
-                widget.snap['uid'].toString() == user.uid
-                    ? IconButton(
+                   widget.snap['uid'].toString()==user.uid
+                   ? IconButton(
                         onPressed: () {
                           showDialog(
                             useRootNavigator: false,
@@ -129,8 +129,8 @@ class _PostCardState extends State<PostCard> {
                                               child: Container(
                                                 padding:
                                                     const EdgeInsets.symmetric(
-                                                        vertical: 12,
-                                                        horizontal: 16),
+                                                        vertical: 5,
+                                                        horizontal:5),
                                                 child: Text(e),
                                               ),
                                               onTap: () {
@@ -149,7 +149,7 @@ class _PostCardState extends State<PostCard> {
                         },
                         icon: const Icon(Icons.more_vert),
                       )
-                    : Container(),
+                       :Container(),
               ],
             ),
           ),

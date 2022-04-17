@@ -1,13 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 import 'package:paws_app/models/user.dart' as model;
 import 'package:paws_app/providers/user_provider.dart';
 import 'package:paws_app/resources/firestore_methods.dart';
-import 'package:paws_app/screens/comments_screen.dart';
 import 'package:paws_app/utils/colors.dart';
 import 'package:paws_app/utils/global_variable.dart';
 import 'package:paws_app/utils/utils.dart';
-import 'package:paws_app/widgets/like_animation.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -85,7 +83,7 @@ class _ePostCardState extends State<ePostCard> {
                     ),
                   ),
                 ),
-                widget.snap['location'].toString() == user.uid
+                widget.snap['uid'].toString()==user.uid
                     ? IconButton(
                   onPressed: () {
                     showDialog(
@@ -125,7 +123,7 @@ class _ePostCardState extends State<ePostCard> {
                   },
                   icon: const Icon(Icons.more_vert),
                 )
-                    : Container(),
+                        :Container(),
               ],
             ),
           ),
@@ -175,6 +173,16 @@ class _ePostCardState extends State<ePostCard> {
                       ],
                     ),
                   ),
+                ),
+                Container(
+                  child: Text(
+                    DateFormat.jm()
+                        .format(widget.snap['datePublished'].toDate()),
+                    style: const TextStyle(
+                      color: secondaryColor,
+                    ),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 4),
                 ),
                 Container(
                   child: Text(

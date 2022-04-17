@@ -295,10 +295,23 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                       ),
                       onPressed: () {
                         if
-                      (t1.text==null && currentAddress==null && _file==null ){
-                          SnackBar(content: Text('Enter the details'),);
-                        Navigator.pop(context);
-                      }
+                      (t1.text.isEmpty  || _file!.isEmpty ) {
+                          showDialog(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              title: Text("Error"),
+                              content: Text("Enter Required Details"),
+                              actions: <Widget>[
+                               TextButton(
+                                  onPressed: () {
+                                    Navigator.of(ctx).pop();
+                                  },
+                                  child: Text("OK"),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
                       else{
                         Navigator.push(context, MaterialPageRoute(
                             builder: (context) => const epostScreen()));
@@ -442,7 +455,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                       ],
                     ),*/
 
-                    Container(),
+
                   ],
                 )
               ],

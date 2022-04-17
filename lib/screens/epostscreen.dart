@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:paws_app/utils/colors.dart';
 import 'package:paws_app/utils/global_variable.dart';
-import 'package:paws_app/widgets/post_card.dart';
 import 'package:paws_app/widgets/eposte_card.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class epostScreen extends StatefulWidget {
-  const epostScreen({Key? key}) : super(key: key);
+  const epostScreen({
+    Key? key,
+  }) : super(key: key);
   @override
   State<epostScreen> createState() => _epostScreenState();
 }
@@ -16,13 +18,55 @@ class _epostScreenState extends State<epostScreen> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
     return Scaffold(
+      endDrawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: const <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(
+                'NGO list',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.people),
+              title: Text('Peta'),
+            ),
+            ListTile(
+              leading: Icon(Icons.people),
+              title: Text('Welfare for stray dogs'),
+            ),
+            ListTile(
+              leading: Icon(Icons.people),
+              title: Text('Ngo 3'),
+            ),
+            ListTile(
+              leading: Icon(Icons.people),
+              title: Text('Ngo 4'),
+            ),
+            ListTile(
+              leading: Icon(Icons.people),
+              title: Text('Ngo 5'),
+            ),
+           ],
+
+        ),
+      ),
       backgroundColor:
       width > webScreenSize ? webBackgroundColor : mobileBackgroundColor,
       appBar: width > webScreenSize
           ? null
           : AppBar(
         backgroundColor: mobileBackgroundColor,
+        foregroundColor: Colors.red,
         centerTitle: false,
         title: SvgPicture.asset(
           'assets/ic_paws_app.svg',
@@ -30,13 +74,6 @@ class _epostScreenState extends State<epostScreen> {
           height: 32,
         ),
         actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.messenger_outline,
-              color: primaryColor,
-            ),
-            onPressed: () {},
-          ),
         ],
       ),
       body: StreamBuilder(
@@ -63,5 +100,6 @@ class _epostScreenState extends State<epostScreen> {
         },
       ),
     );
+
   }
 }
