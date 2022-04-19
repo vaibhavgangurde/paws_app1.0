@@ -12,6 +12,7 @@ import 'package:paws_app/utils/colors.dart';
 import 'package:paws_app/utils/global_variable.dart';
 import 'package:paws_app/utils/utils.dart';
 import 'package:paws_app/widgets/text_field_input.dart';
+import 'ngo.dart';
 
 
 class SignupScreen extends StatefulWidget {
@@ -117,7 +118,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 height: 64,
               ),
               const SizedBox(
-                height: 64,
+                height: 20,
               ),
               Stack(
                 children: [
@@ -144,7 +145,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 ],
               ),
               const SizedBox(
-                height: 10,
+                height: 15,
               ),
               TextFieldInput(
                 hintText: 'Enter your username',
@@ -152,7 +153,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 textEditingController: _usernameController,
               ),
               const SizedBox(
-                height: 24,
+                height: 15,
               ),
               TextFieldInput(
                 hintText: 'Enter your email',
@@ -160,7 +161,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 textEditingController: _emailController,
               ),
               const SizedBox(
-                height: 24,
+                height: 15,
               ),
               TextFieldInput(
                 hintText: 'Enter your password',
@@ -169,7 +170,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 isPass: true,
               ),
               const SizedBox(
-                height: 24,
+                height: 15,
               ),
               TextFieldInput(
                 hintText: 'Enter your bio',
@@ -200,6 +201,11 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
                 onTap: signUpUser,
               ),
+              ElevatedButton(onPressed: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ngo()));
+              }, child: Text('Sign up as Ngo')),
               const SizedBox(
                 height: 12,
               ),

@@ -45,24 +45,6 @@ class _ePostCardState extends State<ePostCard> {
       LocalNotificationService.display(event);
     });
   }
-  var a;
-  ngo() async {
-    try {
-      QuerySnapshot snap = await FirebaseFirestore.instance
-          .collection('users')
-          .where('eid',isEqualTo: 1)
-          .get();
-       a = snap.docs.toString();
-     await  FirebaseMessaging.instance.subscribeToTopic('NGO');
-    } catch (err) {
-      showSnackBar(
-        context,
-        err.toString(),
-      );
-    }
-    setState(() {});
-  }
-
   sendNotificationToTopic(String title)async{
 
     final data = {
@@ -273,7 +255,6 @@ class _ePostCardState extends State<ePostCard> {
                   padding: const EdgeInsets.symmetric(vertical: 4),
                 ),
                 IconButton(onPressed: (){
-                 ngo();
                  sendNotificationToTopic('NGO');
                 }, icon: Icon(Icons.send))
               ],

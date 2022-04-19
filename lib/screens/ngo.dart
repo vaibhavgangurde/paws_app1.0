@@ -8,10 +8,12 @@ import 'package:paws_app/responsive/mobile_screen_layout.dart';
 import 'package:paws_app/responsive/responsive_layout.dart';
 import 'package:paws_app/responsive/web_screen_layout.dart';
 import 'package:paws_app/screens/login_screen.dart';
+import 'package:paws_app/screens/uniqueidngo.dart';
 import 'package:paws_app/utils/colors.dart';
 import 'package:paws_app/utils/global_variable.dart';
 import 'package:paws_app/utils/utils.dart';
 import 'package:paws_app/widgets/text_field_input.dart';
+
 
 
 
@@ -52,8 +54,19 @@ class _ngoState extends State<ngo> {
         bio: _ngobioController.text,
         file: _image!);
     User? user = FirebaseAuth.instance.currentUser;
-    if(user!= null && !user.emailVerified){
+    if (user != null && !user.emailVerified) {
       await user.sendEmailVerification();
+      var actionCodeSettings = ActionCodeSettings(
+        url: 'https://www.example.com/?email=${user.email}',
+        dynamicLinkDomain: 'example.page.link',
+        androidPackageName: 'com.example.android',
+        androidInstallApp: true,
+        androidMinimumVersion: '6',
+        iOSBundleId: 'com.example.ios',
+        handleCodeInApp: true,
+      );
+
+      await user.sendEmailVerification(actionCodeSettings);
     }
     if (res == "success") {
       setState(() {
@@ -73,7 +86,7 @@ class _ngoState extends State<ngo> {
         _isLoading = false;
         Navigator.of(context).push(
             MaterialPageRoute(
-            builder: (context) => const LoginScreen()));
+            builder: (context) => const ngouniqueid()));
       });
       // show the error
       showSnackBar(context, res);
