@@ -65,7 +65,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
       await user.sendEmailVerification(actionCodeSettings);
     }
-    if (res == "success") {
+  if (res == "success") {
       setState(() {
         _isLoading = false;
       });

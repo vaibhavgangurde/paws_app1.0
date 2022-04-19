@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:paws_app/providers/user_provider.dart';
+import 'package:paws_app/resources/lcn.dart';
 import 'package:paws_app/screens/onboarding_pages.dart';
 import 'package:paws_app/responsive/mobile_screen_layout.dart';
 import 'package:paws_app/responsive/responsive_layout.dart';
@@ -11,6 +13,9 @@ import 'package:paws_app/responsive/web_screen_layout.dart';
 // import 'package:paws_app/utils/colors.dart';
 import 'package:provider/provider.dart';
 
+Future<void>_firebaseMessagingBackgroundHandler(RemoteMessage message)async{
+
+}
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -27,6 +32,8 @@ void main() async {
   } else {
     await Firebase.initializeApp();
   }
+  LocalNotificationService.initialize();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(const MyApp());
 }
 
