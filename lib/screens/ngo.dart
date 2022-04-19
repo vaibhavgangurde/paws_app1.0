@@ -211,6 +211,22 @@ class _ngoState extends State<ngo> {
     Flexible(
     child: Container(),
     flex: 2,
-    ), ],),),),  );
+    ),   GestureDetector(
+        onTap: () =>
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const ngouniqueid(),
+              ),
+            ),
+        child: Container(
+          child: const Text(
+            ' Login.',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 8),
+        ),
+      ), ],),),),  );
   }
 }
