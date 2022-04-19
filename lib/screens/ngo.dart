@@ -75,7 +75,10 @@ class _ngoState extends State<ngo> {
       // navigate to the home screen
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const ngouniqueid()
+          builder: (context) => const ResponsiveLayout(
+            mobileScreenLayout: MobileScreenLayout(),
+            webScreenLayout: WebScreenLayout(),
+          ),
         ),
       );
     } else {
