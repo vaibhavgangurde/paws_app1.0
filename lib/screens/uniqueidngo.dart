@@ -5,11 +5,9 @@ import 'login_screen.dart';
 
 class ngouniqueid extends StatefulWidget {
   const ngouniqueid({Key? key}) : super(key: key);
-
   @override
   _ngouniqueidState createState() => _ngouniqueidState();
 }
-
 class _ngouniqueidState extends State<ngouniqueid> {
   final TextEditingController abc = TextEditingController();
 
@@ -32,7 +30,5 @@ class _ngouniqueidState extends State<ngouniqueid> {
         ],
       ),
     );
-
   }
-
 }
