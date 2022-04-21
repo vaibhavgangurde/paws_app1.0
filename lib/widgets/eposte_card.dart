@@ -10,13 +10,10 @@ import 'package:paws_app/utils/global_variable.dart';
 import 'package:paws_app/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:paws_app/resources/lcn.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:paws_app/screens/epostscreen.dart';
+
 
 class ePostCard extends StatefulWidget {
   final snap;
@@ -96,8 +93,7 @@ class _ePostCardState extends State<ePostCard> {
   Widget build(BuildContext context) {
     final model.User user = Provider.of<UserProvider>(context).getUser;
     final width = MediaQuery.of(context).size.width;
-
-    return Container(
+   return Container(
       // boundary needed for web
       decoration: BoxDecoration(
         border: Border.all(
@@ -254,9 +250,13 @@ class _ePostCardState extends State<ePostCard> {
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 4),
                 ),
-                IconButton(onPressed: (){
+                widget.snap['uid'].toString()==user.uid
+                ?IconButton(onPressed: (){
                  sendNotificationToTopic('NGO');
+                 Navigator.pop(context);
+                 showSnackBar(context,'Sent Successfully');
                 }, icon: Icon(Icons.send))
+                    :Container()
               ],
             ),
           )

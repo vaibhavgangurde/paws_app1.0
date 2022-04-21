@@ -7,10 +7,8 @@ import 'package:paws_app/resources/auth_methods.dart';
 import 'package:paws_app/responsive/mobile_screen_layout.dart';
 import 'package:paws_app/responsive/responsive_layout.dart';
 import 'package:paws_app/responsive/web_screen_layout.dart';
-import 'package:paws_app/screens/login_screen.dart';
 import 'package:paws_app/screens/uniqueidngo.dart';
 import 'package:paws_app/utils/colors.dart';
-import 'package:paws_app/utils/global_variable.dart';
 import 'package:paws_app/utils/utils.dart';
 import 'package:paws_app/widgets/text_field_input.dart';
 
@@ -39,7 +37,6 @@ class _ngoState extends State<ngo> {
     _ngopasswordController.dispose();
     _ngonameController.dispose();
   }
-
   void signUpUser() async {
     // set loading to true
     setState(() {
@@ -203,7 +200,9 @@ class _ngoState extends State<ngo> {
     color: blueColor,
     ),
     ),
-    onTap: signUpUser,
+  onTap: (){
+      signUpUser();
+  },
     ),
     //   const SizedBox(
     //   height: 1,

@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:paws_app/models/user.dart' as model;
 import 'package:paws_app/resources/storage_methods.dart';
-// import 'package:paws_app/screens/ngo.dart';
 
 class AuthMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -18,6 +17,7 @@ class AuthMethods {
 
     return model.User.fromSnap(documentSnapshot);
   }
+
 
   // Signing Up User
 
@@ -76,7 +76,6 @@ class AuthMethods {
     return res;
   }
 
-  // logging in user
   Future<String> loginUser({
     required String email,
     required String password,
