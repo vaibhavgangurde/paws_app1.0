@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:paws_app/models/user.dart' as model;
 import 'package:paws_app/providers/user_provider.dart';
@@ -42,6 +43,10 @@ class _ePostCardState extends State<ePostCard> {
       LocalNotificationService.display(event);
     });
   }
+bool show = true;
+  void hide(){
+    show !=show;
+  }
   sendNotificationToTopic(String title)async{
 
     final data = {
@@ -57,13 +62,12 @@ class _ePostCardState extends State<ePostCard> {
         'Authorization': 'key=AAAAUzng3eQ:APA91bEedhbpUv4dH5AFzgIEtoOhtNTBqpuaGSdzCiKSo2IeixhrbSNGZdPbKFgYxxKDraDO0sZUQj2gg66dWUFRbsH1r1OL-Ji1geaO1PfKbfi_GwNKH-KMq-Wu5cCkFFZcyrboAx0a'
       },
           body: jsonEncode(<String,dynamic>{
-            'notification': <String,dynamic> {'title': title,'body': 'Emergency Alert'},
+            'notification': <String,dynamic> {'title': title,'body':'Someone need help'},
             'priority': 'high',
             'data': data,
             'to': '/topics/NGO',
           })
       );
-
 
       if(response.statusCode == 200){
         print("Yeh notificatin is sended");
@@ -76,11 +80,11 @@ class _ePostCardState extends State<ePostCard> {
     }
 
   }
-
+static const i =1;
 
   deleteePost(String postId) async {
     try {
-      await FireStoreMethods().deletePost(postId);
+      await FireStoreMethods().deleteePost(postId);
     } catch (err) {
       showSnackBar(
         context,
@@ -139,7 +143,7 @@ class _ePostCardState extends State<ePostCard> {
                     ),
                   ),
                 ),
-                widget.snap['uid'].toString()==user.uid
+                 widget.snap['uid'].toString()==user.uid
                     ? IconButton(
                   onPressed: () {
                     showDialog(
@@ -179,7 +183,7 @@ class _ePostCardState extends State<ePostCard> {
                   },
                   icon: const Icon(Icons.more_vert),
                 )
-                        :Container(),
+                :Container(),
               ],
             ),
           ),
@@ -251,12 +255,13 @@ class _ePostCardState extends State<ePostCard> {
                   padding: const EdgeInsets.symmetric(vertical: 4),
                 ),
                 widget.snap['uid'].toString()==user.uid
-                ?IconButton(onPressed: (){
-                 sendNotificationToTopic('NGO');
-                 Navigator.pop(context);
+                ?IconButton(
+                  onPressed: (){
+                 sendNotificationToTopic('Alert');
                  showSnackBar(context,'Sent Successfully');
                 }, icon: Icon(Icons.send))
                     :Container()
+                ,
               ],
             ),
           )

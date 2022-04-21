@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:paws_app/utils/colors.dart';
 import 'package:paws_app/utils/global_variable.dart';
@@ -46,40 +47,40 @@ class _epostScreenState extends State<epostScreen> {
 
 
 
-  sendNotification(String title, String token)async{
-
-    final data = {
-      'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-      'id': '1',
-      'status': 'done',
-      'message': title,
-    };
-
-    try{
-      http.Response response = await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),headers: <String,String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'key=AAAAUzng3eQ:APA91bEedhbpUv4dH5AFzgIEtoOhtNTBqpuaGSdzCiKSo2IeixhrbSNGZdPbKFgYxxKDraDO0sZUQj2gg66dWUFRbsH1r1OL-Ji1geaO1PfKbfi_GwNKH-KMq-Wu5cCkFFZcyrboAx0a'
-      },
-          body: jsonEncode(<String,dynamic>{
-            'notification': <String,dynamic> {'title': title,'body': 'You are followed by someone'},
-            'priority': 'high',
-            'data': data,
-            'to': '$token'
-          })
-      );
-
-
-      if(response.statusCode == 200){
-        print("Yeh notificatin is sended");
-      }else{
-        print("Error");
-      }
-
-    }catch(e){
-
-    }
-
-  }
+  // sendNotification(String title, String token)async{
+  //
+  //   final data = {
+  //     'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+  //     'id': '1',
+  //     'status': 'done',
+  //     'message': title,
+  //   };
+  //
+  //   try{
+  //     http.Response response = await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),headers: <String,String>{
+  //       'Content-Type': 'application/json',
+  //       'Authorization': 'key=AAAAUzng3eQ:APA91bEedhbpUv4dH5AFzgIEtoOhtNTBqpuaGSdzCiKSo2IeixhrbSNGZdPbKFgYxxKDraDO0sZUQj2gg66dWUFRbsH1r1OL-Ji1geaO1PfKbfi_GwNKH-KMq-Wu5cCkFFZcyrboAx0a'
+  //     },
+  //         body: jsonEncode(<String,dynamic>{
+  //           'notification': <String,dynamic> {'title': title,'body': 'You are followed by someone'},
+  //           'priority': 'high',
+  //           'data': data,
+  //           'to': '$token'
+  //         })
+  //     );
+  //
+  //
+  //     if(response.statusCode == 200){
+  //       print("Yeh notificatin is sended");
+  //     }else{
+  //       print("Error");
+  //     }
+  //
+  //   }catch(e){
+  //
+  //   }
+  //
+  // }
 
 
   sendNotificationToTopic(String title)async{
@@ -97,7 +98,7 @@ class _epostScreenState extends State<epostScreen> {
         'Authorization': 'key=AAAAUzng3eQ:APA91bEedhbpUv4dH5AFzgIEtoOhtNTBqpuaGSdzCiKSo2IeixhrbSNGZdPbKFgYxxKDraDO0sZUQj2gg66dWUFRbsH1r1OL-Ji1geaO1PfKbfi_GwNKH-KMq-Wu5cCkFFZcyrboAx0a'
       },
           body: jsonEncode(<String,dynamic>{
-            'notification': <String,dynamic> {'title': title,'body': 'You are followed by someone'},
+            'notification': <String,dynamic> {'title': title,'body': 'Someone in trouble'},
             'priority': 'high',
             'data': data,
             'to': '/topics/subscription'

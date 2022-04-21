@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:paws_app/models/eposte.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:paws_app/resources/storage_methods.dart';
+import 'package:paws_app/widgets/eposte_card.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:typed_data';
 import 'package:paws_app/providers/user_provider.dart';
@@ -15,6 +16,7 @@ import 'package:provider/provider.dart';
 import 'epostscreen.dart';
 import '../utils/utils.dart';
 import '../widgets/text_field_input.dart';
+import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
 
 class EmergencyScreen extends StatefulWidget {
   const EmergencyScreen({Key? key}) : super(key: key);
@@ -186,8 +188,10 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                           width: 260,
                         ),
                         IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.notifications_active_rounded),
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=> const epostScreen()));
+                          },
+                          icon: const Icon(Icons.list),
                         )
                       ],
                     ),
@@ -289,13 +293,32 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                       padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
                       margin: const EdgeInsets.all(20),
                     ),
-                    TextButton(
-                      style:  TextButton.styleFrom(
-                        primary: Colors.blue,
-                      ),
-                      onPressed: () {
-                        if
-                      (t1.text.isEmpty  || _file!.isEmpty ) {
+                   ArgonTimerButton(
+                     initialTimer: 0,
+                     height: 50,
+                     width: MediaQuery.of(context).size.width * 0.45,
+                     minWidth: MediaQuery.of(context).size.width * 0.30,
+                     borderRadius: 5.0,
+                     color: Colors.blue,
+                     child: Text(
+                       "Send Post",
+                       style: TextStyle(
+                           color: Colors.white,
+                           fontSize: 18,
+                           fontWeight: FontWeight.w700
+                       ),),
+                     loader: (timeLeft) {
+                       return Text(
+                         "Wait | $timeLeft",
+                         style: TextStyle(
+                             color: Colors.black,
+                             fontSize: 18,
+                             fontWeight: FontWeight.w700
+                         ),
+                       );
+                     },
+                     onTap: (StartTimer,BtnState) {
+                        if(t1.text.isEmpty  || _file!.isEmpty ) {
                           showDialog(
                             context: context,
                             builder: (ctx) => AlertDialog(
@@ -322,14 +345,10 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                           userProvider.getUser.email,
                         );
                       };
+                        if (BtnState == ButtonState.Idle) {
+                          StartTimer(20);
+                        }
                       },
-                      child: const Text(
-                        "Post",
-                        style: TextStyle(
-                            color: Colors.blueAccent,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.0),
-                      ),
                     ),
                   ],
                 ),
