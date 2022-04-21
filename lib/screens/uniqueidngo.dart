@@ -10,46 +10,67 @@ class ngouniqueid extends StatefulWidget {
   @override
   _ngouniqueidState createState() => _ngouniqueidState();
 }
+
 class _ngouniqueidState extends State<ngouniqueid> {
   final TextEditingController abc = TextEditingController();
   final TextEditingController xyz = TextEditingController();
 
-Idstorage(String Ngoname,String uniqueid) async{
-  await FirebaseFirestore.instance.collection('Id').doc().set({
-    'NgoName': Ngoname=abc.text,
-    'uniqueid': uniqueid=xyz.text,
-  });
-}
+  Idstorage(String Ngoname, String uniqueid) async {
+    await FirebaseFirestore.instance.collection('Id').doc().set({
+      'NgoName': Ngoname = abc.text,
+      'uniqueid': uniqueid = xyz.text,
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
-          SizedBox(
-            height: 200,
+          const SizedBox(
+            height: 250,
           ),
           Container(
+            alignment: Alignment.center,
+            width: 350.00,
             child: TextFieldInput(
               hintText: 'Enter Ngo Name',
               textInputType: TextInputType.emailAddress,
               textEditingController: abc,
             ),
           ),
+          const SizedBox(
+            height: 20,
+          ),
           Container(
+            alignment: Alignment.center,
+            width: 350.00,
             child: TextFieldInput(
               hintText: 'Enter Unique Id',
               textInputType: TextInputType.emailAddress,
               textEditingController: xyz,
             ),
           ),
+          const SizedBox(
+            height: 25,
+          ),
           Container(
-          child :ElevatedButton(onPressed: (){
+            alignment: Alignment.center,
+            child: ElevatedButton(
+              onPressed: () {
+                FirebaseMessaging.instance.subscribeToTopic('NGO');
 
-            FirebaseMessaging.instance.subscribeToTopic('NGO');
-
-            Navigator.push(context, MaterialPageRoute(builder: (context)=> const LoginScreen()));
-            showSnackBar(context, 'You will be verified within 24hrs');
-          }, child: Text('Verify'),),),
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoginScreen()));
+                showSnackBar(context, 'You will be verified within 24hrs');
+              },
+              child: const Text(
+                'Verify',
+              ),
+            ),
+          ),
         ],
       ),
     );

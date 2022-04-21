@@ -13,9 +13,7 @@ import 'package:paws_app/responsive/web_screen_layout.dart';
 // import 'package:paws_app/utils/colors.dart';
 import 'package:provider/provider.dart';
 
-Future<void>_firebaseMessagingBackgroundHandler(RemoteMessage message)async{
-
-}
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
