@@ -41,7 +41,7 @@ class _epostScreenState extends State<epostScreen> {
       LocalNotificationService.display(event);
     });
     storeNotificationToken();
-    FirebaseMessaging.instance.subscribeToTopic('subscription');
+    // FirebaseMessaging.instance.subscribeToTopic('subscription');
 
   }
 

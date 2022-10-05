@@ -10,7 +10,7 @@ import 'package:paws_app/widgets/follow_button.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String uid;
-  const ProfileScreen({Key? key, required this.uid}) : super(key: key);
+  const ProfileScreen({Key  ? key, required this.uid}) : super(key: key);
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }

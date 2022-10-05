@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:paws_app/resources/lcn.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:paws_app/screens/comments_screen.dart';
 
 
 class ePostCard extends StatefulWidget {
@@ -76,11 +77,11 @@ bool show = true;
       }
 
     }catch(e){
+      e.toString();
 
     }
 
   }
-static const i =1;
 
   deleteePost(String postId) async {
     try {
@@ -255,13 +256,50 @@ static const i =1;
                   padding: const EdgeInsets.symmetric(vertical: 4),
                 ),
                 widget.snap['uid'].toString()==user.uid
-                ?IconButton(
-                  onPressed: (){
-                 sendNotificationToTopic('Alert');
-                 showSnackBar(context,'Sent Successfully');
-                }, icon: Icon(Icons.send))
+                ?
+                ArgonTimerButton(
+                    initialTimer: 10,
+                    height: 40,
+                    width: MediaQuery.of(context).size.width * 0.45,
+                    minWidth: MediaQuery.of(context).size.width * 0.30,
+                    borderRadius: 5.0,
+                    color: Colors.blue,
+                    child: Text(
+                      "Send Post",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700
+                      ),),
+                    loader: (timeLeft) {
+                      return Text(
+                        "Wait | $timeLeft",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700
+                        ),
+                      );
+                    },
+    onTap: (StartTimer,BtnState) {
+                      StartTimer(600);
+                      sendNotificationToTopic('Emergency Alert');
+    }
+                )
                     :Container()
                 ,
+                IconButton(
+                  icon: const Icon(
+                    Icons.comment_outlined,
+                  ),
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => CommentsScreen(
+                        postId: widget.snap['postId'].toString(),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           )

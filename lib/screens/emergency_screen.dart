@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:paws_app/models/eposte.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:paws_app/resources/storage_methods.dart';
-import 'package:paws_app/widgets/eposte_card.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:typed_data';
 import 'package:paws_app/providers/user_provider.dart';
@@ -30,15 +29,15 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
   final TextEditingController t1 = TextEditingController();
   bool isLoading = false;
   Uint8List? _file;
-  List<String> myItems = [
-    "select type ok",
-    "Accident",
-    "Injury",
-    "Weak",
-    "Physically abused",
-    "In danger/lost",
-    "Not In List"
-  ];
+  // List<String> myItems = [
+  //   "select type ok",
+  //   "Accident",
+  //   "Injury",
+  //   "Weak",
+  //   "Physically abused",
+  //   "In danger/lost",
+  //   "Not In List"
+  // ];
   var myInitialItem = "select type ok";
   String colourGroupVariable = '';
   File? image;

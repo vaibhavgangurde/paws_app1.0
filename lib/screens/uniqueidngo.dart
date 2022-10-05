@@ -59,7 +59,6 @@ class _ngouniqueidState extends State<ngouniqueid> {
             child: ElevatedButton(
               onPressed: () {
                 FirebaseMessaging.instance.subscribeToTopic('NGO');
-
                 Navigator.push(
                     context,
                     MaterialPageRoute(

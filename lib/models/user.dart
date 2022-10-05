@@ -12,7 +12,7 @@ class User {
   const User(
       {required this.username,
       required this.uid,
-      required this.photoUrl,
+        required this.photoUrl,
       required this.email,
       required this.bio,
       required this.followers,
